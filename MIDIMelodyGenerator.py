@@ -1001,9 +1001,9 @@ if __name__ == '__main__':
         time_pattern_to_use = "germaniccelticanglo"
         generate_from_scale_direction_and_time('melody_generated',
                                                # in the key of
-                                               Key.C, 'harmonic_minor',
+                                               Key.C, 'mixolydian',
                                                # starting octave
-                                               3,
+                                               4,
                                                # max length in seconds
                                                60,
                                                # seed
