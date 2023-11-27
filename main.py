@@ -212,6 +212,7 @@ scales = {
 # region Data sorting functions
 
 def get_direction_probabilities(file_name):
+
     if not file_name.endswith(".directionprobabilities"):
         file_name += ".directionprobabilities"
     probabilities = []
@@ -226,9 +227,9 @@ def get_direction_probabilities(file_name):
                 try:
                     parts = data.split()
                     # Attempt to convert the parts to floats
-                    float1 = float(parts[0])
-                    float2 = float(parts[1])
-                    probabilities.append([float1, float2])
+                    value = int(parts[0])
+                    magnitude = float(parts[1])
+                    probabilities.append([value, magnitude])
                 except (ValueError, IndexError):
                     continue
     except FileNotFoundError:
@@ -339,7 +340,7 @@ def get_direction_patterns(direction_patterns_file):
 
             if len(line) < 3 or line[0] == "#":
                 continue
-            print("LINE" + line)
+
             if line.startswith("pattern="):
                 if current_pattern is not None:
                     pitch_patterns.append(current_pattern)
@@ -347,8 +348,18 @@ def get_direction_patterns(direction_patterns_file):
                 current_pattern = DirectionPattern(pattern_name, [])
 
             else:
-                pitch_changes = [int(change) for change in line.split()]
-                current_pattern.direction_changes.extend(pitch_changes)
+                parts = line.strip().split()
+
+                try:
+                    for i in range(len(parts)):
+                        parts[i] = int(parts[i])
+                    current_pattern.direction_changes = parts
+                except (ValueError, IndexError) as e:
+                    print("SKIPPING DATA LINE: " + line)
+                    continue
+
+
+
 
         # Add the last pattern
         if current_pattern is not None:
@@ -425,8 +436,8 @@ def jump_notes_position_in_scale(note, scale_keys, jump_direction):
 
     # show user info about the generate operation
     print("jump_notes_position_in_scale() ================================================== \n" +
-          "note=" + str(note) + ", \n"
-                                "scale_keys=" + str(scale_keys) + ", \n"
+          "note=" + str(note) + ", "
+                                "scale_keys=" + str(scale_keys) + ", "
                                                                   "jump_direction=" + str(jump_direction))
 
     # getting current position inside the scale
@@ -643,7 +654,9 @@ def generate_from_scale_direction_and_time(filename, root_key, scale_name, start
     direction_patterns = []
     for i in use_time_indexes:
         direction_patterns.append(all_direction_patterns[i])
-        if direction_patterns[len(direction_patterns) - 1].direction_changes[0] == 0:
+        print(direction_patterns[len(direction_patterns) - 1])
+        print(direction_patterns[len(direction_patterns) - 1].direction_changes[0])
+        if i > 0 and direction_patterns[len(direction_patterns) - 1].direction_changes[0] == 0:
             # deleting the first zero since it indicates playing the first note in the data
             del direction_patterns[len(direction_patterns) - 1].direction_changes[0]
         # print("Using time pattern: " + all_direction_patterns[i].name)
@@ -674,7 +687,7 @@ def generate_from_scale_direction_and_time(filename, root_key, scale_name, start
 
     print("Using the scale:")
 
-    print(str(scale_keys))
+    print("SCALE KEYS: " + str(scale_keys))
 
     direction_pattern = direction_patterns[0]
     current_direction_pattern_index = 0
@@ -684,7 +697,9 @@ def generate_from_scale_direction_and_time(filename, root_key, scale_name, start
 
     # id rather start at a random position within the key
     # sounds bad having it always start with the same note
-    start_key = scale_keys[random.randint(0, len(scale_keys))]
+    index = random.randint(0, len(scale_keys) - 1)
+    print("INDEX was " + str(index) + ", list size is " + str(len(scale_keys)))
+    start_key = scale_keys[index]
 
     # getting up the first position before the pitch changes happen
     current_note_position = Note(starting_octave, start_key, 0.5, 0.5)
@@ -874,16 +889,17 @@ if __name__ == '__main__':
 
     # endregion
 
-    # region Other stuff
+    # region 0. Other stuff
 
-    # region Generate Direction Patterns
+    # region 0.1 Generate Direction Patterns
 
     do_this = False
     if do_this:
         # getting probabilities of each step's outcome
         probabilities = get_direction_probabilities("example")
+
         # number of values in the pattern
-        pattern_count = 10
+        pattern_count = 60
         # number of values in the pattern
         pattern_size = 8
 
@@ -895,15 +911,42 @@ if __name__ == '__main__':
 
         for i in range(pattern_count):
             pattern = [0]
-            for j in range(pattern_count):
+            j = 0
+            while j < pattern_size:
                 reset = False
                 rand_number = random.uniform(0.0, total_weight)
+                last_move = 0
                 # checking which value to use next
                 for w in range(len(weights)):
                     if rand_number < weights[w]:
                         value = probabilities[w][0]
-                        pattern.append(probabilities[w][0])
+
+                        # region Wildcards
+
+                        # repeat last move wildcard, which moves in the same direction again
+                        if value == 9999:
+                            # in this case the wildcard will not be viable, try another roll
+                            if i == 0:
+                                reset = True
+                                break
+                            else:
+                                # repeat the last move
+                                pattern.append(pattern[len(pattern) - 1])
+                                # print("WILDCARD 0 WAS USED")
+
+                        # endregion
+
+                        # standard, just add the value found
+                        else:
+                            pattern.append(probabilities[w][0])
+
                         break
+
+                # if resetting, continue and try again
+                if reset:
+                    continue
+
+                j += 1
 
             print("pattern=Pattern " + str(i))
             print(' '.join(map(str, pattern)) + "\n")
@@ -954,13 +997,13 @@ if __name__ == '__main__':
     do_this = True
     if do_this:
         # this will only work when both files have the same name
-        direction_pattern_to_use = "general"
-        time_pattern_to_use = "snes_minor"
+        direction_pattern_to_use = "tweaked1"
+        time_pattern_to_use = "germaniccelticanglo"
         generate_from_scale_direction_and_time('melody_generated',
                                                # in the key of
-                                               Key.A, 'dorian',
+                                               Key.C, 'harmonic_minor',
                                                # starting octave
-                                               4,
+                                               3,
                                                # max length in seconds
                                                60,
                                                # seed

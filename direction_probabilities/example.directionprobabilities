@@ -4,6 +4,9 @@
 # FORMAT
 # int int
 # for the value, and the chance of that value
+#
+# WILDCARDS
+# 9999=continue with the same direction of movement as last time
 
 # 5% chance of -3
 -3 0.05
@@ -25,3 +28,6 @@
 
 # 15% chance of 0
 0 0.15
+
+# 15% chance of repeat last move wildcard
+9999 0.15
