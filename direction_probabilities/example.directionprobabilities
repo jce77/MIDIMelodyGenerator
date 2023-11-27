@@ -1,0 +1,27 @@
+# These are for generating the note direction data that decides
+# to go up/down the scale or stay in the same spot for each note
+#
+# FORMAT
+# int int
+# for the value, and the chance of that value
+
+# 5% chance of -3
+-3 0.05
+
+# 5% chance of 3
+3 0.05
+
+# 10% chance of -2
+-2 0.1
+
+# 10% chance of 2
+2 0.1
+
+# 20% chance of 1
+-1 0.2
+
+# 20% chance of 1
+1 0.2
+
+# 15% chance of 0
+0 0.15

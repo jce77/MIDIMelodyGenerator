@@ -1,0 +1,18 @@
+# -------------------------------------------------------------------------------------|
+# Pitch patterns refer patterns of direction pitch change, not caring for key or scale
+# -------------------------------------------------------------------------------------|
+# syntax example:
+# pattern=example name 1
+# 1 -1 1 2 3
+#
+# pattern=example name 2
+# 0 1 0 2 -3
+#
+# NOTE: Lines starting with # are comments
+# -------------------------------------------------------------------------------------|
+
+pattern=example name 1
+0 2 -1 2 -3 3 -2 4
+
+pattern=example name 2
+0 -2 1 -3 2 -4 3 -2

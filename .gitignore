@@ -1,3 +1,16 @@
+# my own example folders
+time_patterns/*
+!time_patterns/example.timepatterns
+
+pitch_patterns/*
+!pitch_patterns/example.pitchpatterns
+
+direction_patterns/*
+!direction_patterns/example.directionpatterns
+
+direction_probabilities/*
+!direction_probabilities/example.directionprobabilities
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -116,6 +129,7 @@ celerybeat.pid
 .venv
 env/
 venv/
+output/
 ENV/
 env.bak/
 venv.bak/
