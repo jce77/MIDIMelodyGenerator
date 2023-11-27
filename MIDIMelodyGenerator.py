@@ -1,4 +1,5 @@
 import copy
+import math
 import os
 import sys
 from enum import Enum
@@ -373,6 +374,13 @@ def get_direction_patterns(direction_patterns_file):
 # region Helper functions
 
 
+def lehmer_seed_combine(seed, i):
+    a, m = 23, 4567  # Adjust these parameters as needed
+    combined_seed = (a * seed) % m
+    combined_seed ^= i
+    return combined_seed
+
+
 def transpose_note(note, pitch_shift):
     new_key_value = (note.key.value + pitch_shift - 1) % 12 + 1
     new_octave = note.octave + (note.key.value + pitch_shift - 1) // 12
@@ -571,19 +579,37 @@ def scale_to_midi_example(filename, scale_name, root_key, starting_octave):
 
 # region generate_from_scale_direction_and_time
 
-def generate_from_scale_direction_and_time(filename, root_key, scale_name, starting_octave, length_in_seconds, seed,
+def generate_from_scale_direction_and_time(filename, root_key, scale_name, scale_use_percentage, starting_octave,
+                                           length_in_seconds, seed,
                                            time_patterns_file, min_to_max_time_pattern_count,
                                            direction_patterns_file, min_to_max_direction_pattern_count):
     # region Initial setup
 
     scale_keys = generate_scale_keys(scale_name, root_key, starting_octave)
-    seed_modifier = 64
+    seed_modifier = 32
     print("RUNNING generate_melody()")
     if not direction_patterns_file.endswith(".directionpatterns"):
         direction_patterns_file += ".directionpatterns"
 
     if not time_patterns_file.endswith(".timepatterns"):
         time_patterns_file += ".timepatterns"
+
+    # endregion
+
+    # region Removing values from scale if needed, to simplify the pieces being made
+
+    if scale_use_percentage < 1:
+        print("SCALE ARE: " + str(scale_keys))
+
+        remove_values_count = int(math.floor(len(scale_keys) * scale_use_percentage))
+        for i in range(remove_values_count):
+            seed_for_this = lehmer_seed_combine(seed, seed_modifier)
+            seed_modifier += 32
+            random.seed(seed_for_this)
+            # removed anything
+            scale_keys.pop(random.randint(0, len(scale_keys) - 2))
+
+        print("SCALE REDUCED TO: " + str(scale_keys))
 
     # endregion
 
@@ -647,9 +673,9 @@ def generate_from_scale_direction_and_time(filename, root_key, scale_name, start
     # region Choosing which direction patterns will be available for this output
 
     # getting direction patterns
-    use_time_indexes = generate_random_indexes(all_direction_patterns, seed * seed_modifier,
+    use_time_indexes = generate_random_indexes(all_direction_patterns, lehmer_seed_combine(seed, seed_modifier),
                                                min_to_max_direction_pattern_count)
-    seed_modifier += 1
+    seed_modifier += 32
     # print("Direction indexes: " + str(use_time_indexes))
     direction_patterns = []
     for i in use_time_indexes:
@@ -662,9 +688,9 @@ def generate_from_scale_direction_and_time(filename, root_key, scale_name, start
         # print("Using time pattern: " + all_direction_patterns[i].name)
 
     # getting time_patterns
-    use_time_indexes = generate_random_indexes(all_time_patterns, seed * seed_modifier,
+    use_time_indexes = generate_random_indexes(all_time_patterns, lehmer_seed_combine(seed, seed_modifier),
                                                min_to_max_time_pattern_count)
-    seed_modifier += 1
+    seed_modifier += 32
     # print("Time indexes: " + str(use_time_indexes))
     time_patterns = []
     for i in use_time_indexes:
@@ -808,8 +834,9 @@ def generate_from_time_and_pitch_patterns(filename, root_key, scale_name, starti
     # region Getting time_patterns and pitch_patterns
 
     # getting time_patterns
-    use_time_indexes = generate_random_indexes(all_time_patterns, seed * seed_modifier, min_to_max_time_pattern_count)
-    seed_modifier += 1
+
+    use_time_indexes = generate_random_indexes(all_time_patterns, lehmer_seed_combine(seed, seed_modifier), min_to_max_time_pattern_count)
+    seed_modifier += 32
     # print("Time indexes: " + str(use_time_indexes))
     time_patterns = []
     for i in use_time_indexes:
@@ -817,9 +844,9 @@ def generate_from_time_and_pitch_patterns(filename, root_key, scale_name, starti
         # print("Using time pattern: " + all_time_patterns[i].name)
 
     # getting pitch_patterns now
-    use_pitch_indexes = generate_random_indexes(all_pitch_patterns, seed * seed_modifier,
+    use_pitch_indexes = generate_random_indexes(all_pitch_patterns, lehmer_seed_combine(seed, seed_modifier),
                                                 min_to_max_pitch_pattern_count)
-    seed_modifier += 1
+    seed_modifier += 32
     # print("Pitch indexes: " + str(use_pitch_indexes))
     pitch_patterns = []
     for i in use_pitch_indexes:
@@ -895,6 +922,9 @@ if __name__ == '__main__':
 
     do_this = False
     if do_this:
+
+        # region Main
+
         # getting probabilities of each step's outcome
         probabilities = get_direction_probabilities("example")
 
@@ -950,6 +980,7 @@ if __name__ == '__main__':
 
             print("pattern=Pattern " + str(i))
             print(' '.join(map(str, pattern)) + "\n")
+        # endregion
 
     # endregion
 
@@ -972,7 +1003,7 @@ if __name__ == '__main__':
     do_this = False
     if do_this:
         # this will only work when both files have the same name
-        patterns_to_use = "germaniccelticanglo"
+        patterns_to_use = "example"
         generate_from_time_and_pitch_patterns('melody_generated',
                                               # in the key of
                                               Key.C, 'minor',
@@ -997,11 +1028,15 @@ if __name__ == '__main__':
     do_this = True
     if do_this:
         # this will only work when both files have the same name
-        direction_pattern_to_use = "tweaked1"
-        time_pattern_to_use = "germaniccelticanglo"
+        direction_pattern_to_use = "example"
+        time_pattern_to_use = "example"
         generate_from_scale_direction_and_time('melody_generated',
                                                # in the key of
-                                               Key.C, 'mixolydian',
+                                               Key.C,
+                                               # using the scale
+                                               'mixolydian',
+                                               # percentage of scale to use (0.0 - 1.0)
+                                               0.4,
                                                # starting octave
                                                4,
                                                # max length in seconds
