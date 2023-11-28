@@ -11,6 +11,8 @@ direction_patterns/*
 direction_probabilities/*
 !direction_probabilities/example.directionprobabilities
 
+notes/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

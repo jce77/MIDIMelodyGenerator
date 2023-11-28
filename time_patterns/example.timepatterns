@@ -18,14 +18,771 @@
 # NOTE: Lines starting with # are comments
 # -------------------------------------------------------------------------------------|
 
-pattern=example name 1
+pattern=RPG Town Waltz
 time_signature=FourFour
-3 0
+1 0.5
 0.5 0
+0.5 0.5
+1 0
+1 0.5
 0.5 0
-4 0
+0.5 0.5
+1 0
 
-pattern=example name 2
+pattern=Relaxing RPG Stroll
 time_signature=FourFour
-3 0
+1 0.5
+0.5 0.5
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0
+0.5 0.5
+1 0
+
+pattern=RPG Town Serenade
+time_signature=FourFour
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0
+0.5 0.5
+1 0
+1 0.5
+0.5 0.5
+
+pattern=Peaceful RPG Square
+time_signature=FourFour
+0.5 0
+0.5 0
+0.5 0.5
+1 0
+1 0.5
+0.5 0.5
+1 0.5
+0.5 0
+
+pattern=Morning RPG Market
+time_signature=FourFour
+1 0.5
+0.5 0
+1 0.5
+0.5 0
+0.5 0.5
+0.5 0
+0.5 0.5
+1 0
+
+pattern=Tranquil RPG Plaza
+time_signature=FourFour
+0.5 0
+0.5 0.5
+1 0
+1 0.5
+0.5 0
+1 0
+0.5 0.5
+1 0
+
+pattern=RPG Town Lullaby
+time_signature=FourFour
+1 0
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0.5
+0.5 0
+1 0.5
+
+pattern=RPG Town Courtyard
+time_signature=FourFour
+1 0
+0.5 0
+0.5 0.5
+1 0
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0.5
+
+pattern=Calm RPG Village
+time_signature=FourFour
+1 0
+0.5 0
+1 0
+0.5 0
+1 0.5
+0.5 0
+0.5 0.5
+1 0.5
+
+pattern=RPG Town Reflection
+time_signature=FourFour
+0.5 0
+1 0
+0.5 0
+1 0.5
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0
+
+pattern=Cozy RPG Village
+time_signature=FourFour
+1 0.5
+0.5 0
+0.5 0.5
+0.5 0.5
+1 0
+0.5 0
+1 0.5
+0.5 0.5
+
+pattern=Tranquil Market Day
+time_signature=FourFour
+1 0.5
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+
+pattern=Relaxed RPG Square
+time_signature=FourFour
+0.5 0
+1 0
+0.5 0
+1 0.5
+0.5 0
+1 0
+0.5 0
+1 0
+
+pattern=Peaceful Village Stroll
+time_signature=FourFour
+0.5 0
+1 0
+0.5 0
+0.5 0.5
+0.5 0.5
+1 0
+1 0.5
+0.5 0
+
+pattern=Serenade by the Fountain
+time_signature=FourFour
+1 0.5
+0.5 0.5
+0.5 0
+1 0
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+
+pattern=Lazy Afternoon Melody
+time_signature=FourFour
+0.5 0
+0.5 0.5
+1 0
+0.5 0.5
+1 0.5
+0.5 0
+0.5 0.5
+1 0
+
+pattern=RPG Town Daydream
+time_signature=FourFour
+1 0
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+
+pattern=Evening Tavern Tune
+time_signature=FourFour
+0.5 0.5
+1 0.5
+0.5 0
+1 0.5
+0.5 0
+0.5 0.5
+1 0
+1 0
+
+pattern=Charming Village Waltz
+time_signature=FourFour
+1 0.5
+0.5 0.5
+0.5 0.5
+1 0
+0.5 0
+1 0.5
+0.5 0.5
+
+pattern=Mellow Town Gathering
+time_signature=FourFour
+0.5 0
+1 0
+0.5 0.5
+1 0
+0.5 0.5
+0.5 0.5
+1 0
+0.5 0
+
+pattern=Dreamy Village Afternoon
+time_signature=FourFour
+1 0.5
+0.5 0
+0.5 0.5
+0.5 0
+0.5 0.5
+0.5 0
+0.5 0.5
+1 0
+
+pattern=Whimsical Town Square
+time_signature=FourFour
+0.5 0.5
+1 0
+0.5 0
+1 0.5
+0.5 0.5
+1 0
+0.5 0
+0.5 0.5
+
+pattern=Lazy Sunday Stroll
+time_signature=FourFour
+0.5 0.5
+0.5 0.5
+1 0
+0.5 0
+1 0.5
+0.5 0.5
+1 0
+0.5 0
+
+pattern=Village Sunset Serenity
+time_signature=FourFour
+1 0
+0.5 0.5
+1 0
+0.5 0.5
+0.5 0
+1 0.5
+0.5 0
+0.5 0.5
+
+pattern=Cozy Inn Harmony
+time_signature=FourFour
+0.5 0.5
+0.5 0
+1 0
+0.5 0
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+
+pattern=Harbor Twilight Melody
+time_signature=FourFour
+1 0.5
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0
+0.5 0.5
+0.5 0
+1 0.5
+
+pattern=Enchanted Town Square
+time_signature=FourFour
+0.5 0
+1 0.5
+0.5 0
+0.5 0.5
+0.5 0.5
+1 0
+1 0.5
+0.5 0
+
+pattern=RPG Village Lullaby
+time_signature=FourFour
+1 0.5
+0.5 0.5
+1 0
+0.5 0
+1 0
+0.5 0
+0.5 0.5
+1 0
+
+pattern=Tranquil Moonlit Path
+time_signature=FourFour
+0.5 0.5
+1 0
+0.5 0.5
+0.5 0
+1 0.5
+0.5 0.5
+1 0
+0.5 0
+
+pattern=Gentle Town Breeze
+time_signature=FourFour
+0.5 0.5
+0.5 0
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0
+0.5 0.5
+
+pattern=Serene Market Morning
+time_signature=FourFour
+0.5 0
+1 0
+0.5 0.5
+0.5 0
+1 0.5
+0.5 0.5
+1 0
+0.5 0
+
+pattern=Warm Hearth Harmony
+time_signature=FourFour
+1 0
+0.5 0.5
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0
+1 0.5
+0.5 0
+
+pattern=Midday Meadow Melody
+time_signature=FourFour
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0
+0.5 0.5
+
+pattern=Peaceful Town Square
+time_signature=FourFour
+0.5 0.5
+1 0
+0.5 0
+1 0.5
+0.5 0.5
+1 0
+0.5 0
+0.5 0.5
+
+pattern=Tranquil Fountain Reflection
+time_signature=FourFour
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+
+pattern=Cozy Inn Evening
+time_signature=FourFour
+1 0
+0.5 0.5
+1 0
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0
+0.5 0.5
+
+pattern=Charming Town Twilight
+time_signature=FourFour
+0.5 0.5
+0.5 0
+1 0.5
+0.5 0
+1 0
+0.5 0.5
+1 0
+0.5 0
+
+pattern=Mystic Moonlight Serenade
+time_signature=FourFour
+1 0
+0.5 0.5
+1 0
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0
+0.5 0.5
+
+pattern=Enchanted Starlit Sky
+time_signature=FourFour
+0.5 0
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0
+0.5 0.5
+1 0
+
+pattern=Harbor Sunset Reflection
+time_signature=FourFour
+0.5 0.5
+1 0
+0.5 0.5
+0.5 0
+1 0.5
+0.5 0.5
+1 0
+0.5 0
+
+pattern=Dreamy Village Afternoon
+time_signature=FourFour
+1 0.5
+0.5 0
+0.5 0.5
+0.5 0
+1 0.5
+0.5 0
+1 0
+0.5 0.5
+
+pattern=Lazy Sunday Market
+time_signature=FourFour
+1 0.5
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0
+0.5 0.5
+1 0
+0.5 0
+
+pattern=Whimsical Town Stroll
+time_signature=FourFour
+0.5 0.5
+1 0
+0.5 0
+1 0.5
+0.5 0.5
+1 0
+0.5 0.5
+0.5 0
+
+pattern=Sunny Courtyard Reverie
+time_signature=FourFour
+1 0
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0.5
+0.5 0
+0.5 0.5
+
+pattern=Gentle Breeze Alley
+time_signature=FourFour
+0.5 0.5
+0.5 0
+0.5 0.5
+1 0
+0.5 0
+1 0.5
+0.5 0
+0.5 0.5
+
+pattern=Serendipity Plaza
+time_signature=FourFour
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0.5
+0.5 0
+1 0
+0.5 0.5
+
+pattern=Peaceful Garden Path
+time_signature=FourFour
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0
+1 0.5
+0.5 0.5
+1 0
+0.5 0
+
+pattern=Tranquil Park Bench
+time_signature=FourFour
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0
+0.5 0.5
+
+pattern=Sunset Bridge Harmony
+time_signature=FourFour
+1 0.5
+0.5 0
+0.5 0.5
+0.5 0
+1 0.5
+0.5 0
+1 0
+0.5 0.5
+
+pattern=Evening Moonlit Square
+time_signature=FourFour
+0.5 0.5
+0.5 0
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0.5
+0.5 0
+
+pattern=Cozy Hearth Inn
+time_signature=FourFour
+0.5 0.5
+1 0.5
+0.5 0.5
+1 0
+1 0.5
+0.5 0.5
+0.5 0
+0.5 0.5
+
+pattern=Quiet Marketplace
+time_signature=FourFour
+0.5 0.5
+1 0
+0.5 0.5
+0.5 0
+1 0.5
+0.5 0.5
+1 0
+0.5 0
+
+pattern=Harmony of Tranquility
+time_signature=FourFour
+1 0.5
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0
+
+pattern=Evening Tea Ceremony
+time_signature=FourFour
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0
+0.5 0.5
+1 0
+0.5 0.5
+0.5 0
+
+pattern=Garden of Serenity
+time_signature=FourFour
+0.5 0.5
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0.5
+1 0
+0.5 0
+0.5 0.5
+
+pattern=Lullaby at Moonlit Square
+time_signature=FourFour
+0.5 0
+1 0.5
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0.5
+0.5 0
+
+pattern=Soft Glow Tavern
+time_signature=FourFour
+0.5 0.5
+1 0
+1 0.5
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0.5
+0.5 0
+
+pattern=Enchanted Town Square
+time_signature=FourFour
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0.5
+0.5 0
+
+pattern=Starry Night Reflection
+time_signature=FourFour
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0.5
+1 0.5
+0.5 0
+0.5 0.5
+
+pattern=Tranquil Fountain Plaza
+time_signature=FourFour
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0
+
+pattern=Dreamy Village Square
+time_signature=FourFour
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0
+0.5 0.5
+1 0
+0.5 0.5
+0.5 0
+
+pattern=Whispers in the Breeze
+time_signature=FourFour
+1 0.5
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0
+
+pattern=Peaceful Courtyard
+time_signature=FourFour
+0.5 0.5
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0.5
+1 0
+0.5 0
+0.5 0.5
+
+pattern=Tranquil Market Stroll
+time_signature=FourFour
+0.5 0
+1 0.5
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0.5
+0.5 0
+
+pattern=Soft Moonlit Promenade
+time_signature=FourFour
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0.5
+0.5 0
+
+pattern=Gentle Garden Breeze
+time_signature=FourFour
+0.5 0.5
+0.5 0
+1 0.5
+0.5 0.5
+1 0
+0.5 0.5
+1 0
+0.5 0
+
+pattern=Soothing Hearthside
+time_signature=FourFour
+0.5 0.5
+1 0
+1 0.5
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0.5
+0.5 0
+
+pattern=Calm Reflection Pool
+time_signature=FourFour
+0.5 0
+1 0.5
+1 0.5
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0.5
+0.5 0
+
+pattern=Mystical Town Square
+time_signature=FourFour
+0.5 0
+1 0.5
+0.5 0.5
+0.5 0
+0.5 0.5
+1 0.5
+0.5 0.5
+0.5 0
+
+pattern=Serenade by the Riverside
+time_signature=FourFour
+0.5 0.5
+0.5 0
+1 0.5
+0.5 0.5
+1 0.5
+0.5 0
+0.5 0.5
 0.5 0

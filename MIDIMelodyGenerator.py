@@ -213,7 +213,6 @@ scales = {
 # region Data sorting functions
 
 def get_direction_probabilities(file_name):
-
     if not file_name.endswith(".directionprobabilities"):
         file_name += ".directionprobabilities"
     probabilities = []
@@ -358,9 +357,6 @@ def get_direction_patterns(direction_patterns_file):
                 except (ValueError, IndexError) as e:
                     print("SKIPPING DATA LINE: " + line)
                     continue
-
-
-
 
         # Add the last pattern
         if current_pattern is not None:
@@ -536,6 +532,246 @@ def generate_random_indexes(input_list, seed, min_to_max_time_pattern_count):
 
 # endregion
 
+# region run parameter processing
+
+def generate_melody_run_commands(segments):
+    print("RUNNING  ARGUMENTS FOR generate_melody_run_commands ")
+
+    # region Setting defaults
+    scale = "major"
+    key = Key.C
+    octave = 3
+    direction_patterns_file = "example"
+    min_direction_patterns = 1
+    max_direction_patterns = 3
+    time_patterns_file = "example"
+    min_time_patterns = 1
+    max_time_patterns = 3
+    output_filename = "melody_generated"
+    scale_percentage = 1
+    seed = random.randint(100000000, 999999999)
+
+    # endregion
+
+    # region Reading command arguments and setting variables
+
+    i = 0
+    while i < len(segments):
+        segment = segments[i].strip()
+
+        if segment == '-generate melody':
+            i += 1
+        elif segment.startswith('-scale'):
+            scale = segments[i][len('-scale'):].strip()
+            i += 1
+        elif segment.startswith('-key'):
+            key_str = segments[i][len('-key'):].strip()
+            try:
+                key = Key[key_str]
+            except KeyError:
+                print(f"Error: Invalid key value: {key_str}")
+                sys.exit(1)
+            i += 1
+        elif segment.startswith('-octave'):
+            octave = int(segments[i][len('-octave'):].strip())
+            i += 1
+        elif segment.startswith('-directions'):
+            parts = segments[i].split()
+            direction_patterns_file = parts[1]
+            min_direction_patterns = int(parts[2])
+            max_direction_patterns = int(parts[3])
+            i += 1
+        elif segment.startswith('-times'):
+            parts = segments[i].split()
+            time_patterns_file = parts[1]
+            min_time_patterns = int(parts[2])
+            max_time_patterns = int(parts[3])
+            i += 1
+        elif segment.startswith('-output_file'):
+            output_filename = segments[i][len('-output_file'):].strip()
+            i += 1
+        elif segment.startswith('-percentage_of_scale'):
+            scale_percentage = float(segments[i][len('-percentage_of_scale'):].strip())
+            i += 1
+        elif segment.startswith('-seed'):
+            seed = int(segments[i][len('-seed'):].strip())
+            i += 1
+        else:
+            print(f"Warning: Unrecognized command: {segment}")
+            i += 1
+
+
+    print("scale=" + str(scale))
+    print("key=" + str(key))
+    print("octave=" + str(octave))
+    print("direction_patterns_file=" + str(direction_patterns_file))
+    print("min_direction_patterns=" + str(min_direction_patterns))
+    print("max_direction_patterns=" + str(max_direction_patterns))
+    print("time_patterns_file=" + str(time_patterns_file))
+    print("min_time_patterns=" + str(min_time_patterns))
+    print("max_time_patterns=" + str(max_time_patterns))
+    print("output_filename=" + str(output_filename))
+    print("scale_percentage=" + str(scale_percentage))
+    print("seed=" + str(seed))
+
+    # endregion
+
+    # region Error checking
+
+    print("Not yet implemented")
+
+    # endregion
+
+    # region Running command
+
+    generate_from_scale_direction_and_time(output_filename,
+                                           # in the key of
+                                           key,
+                                           # using the scale
+                                           scale,
+                                           # percentage of scale to use (0.0 - 1.0)
+                                           scale_percentage,
+                                           # starting octave
+                                           octave,
+                                           # seed
+                                           seed,
+                                           # time patterns file ---------------------
+                                           time_patterns_file,
+                                           [min_time_patterns, max_time_patterns],  # ^^ min to max possible to use
+                                           # direction patterns file ---------------------
+                                           direction_patterns_file,
+                                           [min_direction_patterns, max_direction_patterns],  # ^^ min to max possible to use
+                                           )
+
+    # endregion
+
+
+def generate_direction_pattern_commands(segments):
+    print("RUNNING  ARGUMENTS FOR generate_direction_pattern_command ")
+
+    # region defaults
+
+    direction_probabilities_file = "example"
+    # number of patterns
+    pattern_count = 60
+    # number of values in the pattern
+    pattern_size = 8
+
+    # endregion
+
+    # region reading command arguments
+
+    i = 0
+    while i < len(segments):
+        segment = segments[i].strip()
+
+        if segment == '-generate direction pattern':
+            i += 1
+        elif segment.startswith('-probabilities'):
+            direction_probabilities_file = segments[i].split()[1].strip()
+            i += 1
+        elif segment.startswith('-size'):
+            if i + 1 < len(segments):
+                pattern_size = int(segments[i].split()[1].strip())
+                i += 1
+            else:
+                print("Error: Missing value for -size command.")
+                sys.exit(1)
+        elif segment.startswith('-patterns'):
+            try:
+                pattern_count = int(segments[i].split()[1].strip())
+                i += 1
+            except IndexError:
+                print("Error: Missing value for -patterns command.")
+                sys.exit(1)
+            except ValueError:
+                print(f"Error: Invalid value for -patterns command: {segments[i].split()[1].strip()}")
+                sys.exit(1)
+        else:
+            print(f"Warning: Unrecognized command: {segment}")
+            i += 1
+
+    print("direction_probabilities_file=" + str(direction_probabilities_file))
+    print("pattern_count=" + str(pattern_count))
+    print("pattern_size=" + str(pattern_size))
+
+    # endregion
+
+    # region Main
+
+    # getting probabilities of each step's outcome
+    probabilities = get_direction_probabilities(direction_probabilities_file)
+    weights = []
+    total_weight = 0
+    for x in probabilities:
+        total_weight += x[1]
+        weights.append(total_weight)
+
+    for i in range(pattern_count):
+        pattern = [0]
+        j = 0
+        while j < pattern_size:
+            reset = False
+            rand_number = random.uniform(0.0, total_weight)
+            last_move = 0
+            # checking which value to use next
+            for w in range(len(weights)):
+                if rand_number < weights[w]:
+                    value = probabilities[w][0]
+
+                    # region Wildcards
+
+                    # repeat last move wildcard, which moves in the same direction again
+                    if value == 9999:
+                        # in this case the wildcard will not be viable, try another roll
+                        if i == 0:
+                            reset = True
+                            break
+                        else:
+                            # repeat the last move
+                            pattern.append(pattern[len(pattern) - 1])
+                            # print("WILDCARD 0 WAS USED")
+
+                    # endregion
+
+                    # standard, just add the value found
+                    else:
+                        pattern.append(probabilities[w][0])
+
+                    break
+
+            # if resetting, continue and try again
+            if reset:
+                continue
+
+            j += 1
+
+        print("pattern=Pattern " + str(i))
+        print(' '.join(map(str, pattern)) + "\n")
+    # endregion
+
+    pass
+
+
+def main_function(arguments):
+    print("process_command_line ---------------------------------------")
+    command = ' '.join(arguments[1:])
+    segments = command.split('-')
+    segments = [segment.strip() for segment in segments if segment.strip()]
+    for i in range(len(segments)):
+        segments[i] = "-" + segments[i]
+
+    for i in range(len(segments)):
+        if segments[i].startswith("-generate melody"):
+            generate_melody_run_commands(segments)
+            pass
+        elif segments[i].startswith("-generate direction pattern"):
+            generate_direction_pattern_commands(segments)
+            pass
+        # print(f"Segment: {segments[i]}")
+
+# endregion
+
 # region Scale to midi example
 
 
@@ -580,7 +816,7 @@ def scale_to_midi_example(filename, scale_name, root_key, starting_octave):
 # region generate_from_scale_direction_and_time
 
 def generate_from_scale_direction_and_time(filename, root_key, scale_name, scale_use_percentage, starting_octave,
-                                           length_in_seconds, seed,
+                                           seed,
                                            time_patterns_file, min_to_max_time_pattern_count,
                                            direction_patterns_file, min_to_max_direction_pattern_count):
     # region Initial setup
@@ -632,7 +868,6 @@ def generate_from_scale_direction_and_time(filename, root_key, scale_name, scale
           ", root_key=" + str(root_key) +
           ", scale_name=" + str(scale_name) +
           ", starting_octave=" + str(starting_octave) +
-          ", length_in_seconds=" + str(length_in_seconds) +
           ", seed=" + str(seed) +
           ", time_patterns_file=" + str(time_patterns_file) +
           ", min_to_max_time_pattern_count=" + str(min_to_max_time_pattern_count),
@@ -835,7 +1070,8 @@ def generate_from_time_and_pitch_patterns(filename, root_key, scale_name, starti
 
     # getting time_patterns
 
-    use_time_indexes = generate_random_indexes(all_time_patterns, lehmer_seed_combine(seed, seed_modifier), min_to_max_time_pattern_count)
+    use_time_indexes = generate_random_indexes(all_time_patterns, lehmer_seed_combine(seed, seed_modifier),
+                                               min_to_max_time_pattern_count)
     seed_modifier += 32
     # print("Time indexes: " + str(use_time_indexes))
     time_patterns = []
@@ -896,12 +1132,104 @@ def generate_from_time_and_pitch_patterns(filename, root_key, scale_name, starti
 
 # endregion
 
+# region User prompts
+
+def show_instructions():
+    global scales
+    scale_names = []
+    for scale in scales:
+        scale_names.append(scale)
+    help_text = "\n\nWelcome to the MIDI Melody Generator, a program that allows for generation\n " \
+                "of MIDI files based on input parameters.\n\n"
+    help_text += "-----------------------------------------------------\n"
+    help_text += "Getting started:\n\n"
+    help_text += "This program is run by run parameters and data files. To get started\n"
+    help_text += "first look at the example data files inside the folders:\n"
+    help_text += "   direction_patterns, direction_probabilities, and time_patterns.\n"
+    help_text += "direction_probabilities folder contains data for how direction_patterns are generated.\n"
+    help_text += "direction_patterns folder contains data that determines how the generator travels\n"
+    help_text += "around the scale.\n"
+    help_text += "time_patterns folder contains data that determines how long beats and rests last.\n"
+    help_text += "\nThe '-generate direction pattern' command shown below can be used to assist with generation of \n"
+    help_text += "the direction_patterns. This command also requires setting up time_pattern data which I don't currently\n"
+    help_text += "have a generation function for.\n"
+    help_text += "-----------------------------------------------------\n"
+
+    help_text += "Generate Melody Run Command: \n\n"
+    help_text += "-generate melody\n" \
+    "commands:\n"\
+    "  -scale scale_name (default 'major')\n"\
+    "  -key keyname (default 'C')\n"\
+    "  -octave number (default 3)\n"\
+    "  -directions filename min_to_use max_to_use (default 'example' 1 3)\n"\
+    "  -times filename min_to_use max_to_use (default 'example' 1 3)\n"\
+    "  -output_file filename (default 'melody_generated')\n"\
+    "  -scale_percentage value (by default 1, between 0.0 and 1.0)\n"\
+    "  -seed value (default random)\n"\
+    "\n"\
+    "Starting with '-generate melody', enter command after command on a single line.\n\n"\
+    "The times file must exist inside the 'time_patterns' folder. The directions file must exist\n" \
+    "inside the 'direction_patterns' folder." \
+    " \n\n"
+
+    help_text +="All possible scale values: \n       "
+    for i in range(len(scale_names)):
+        help_text += scale_names[i]
+        if i < (len(scale_names) - 1):
+            help_text += ", "
+        if i % 4 == 0 and i != (len(scale_names) - 1) and i != 0:
+            help_text += "\n       "
+    help_text += "\n\n"
+
+    help_text += "All possible key values:\n       "
+    key_values = [key.name for key in Key]
+    for i, key in enumerate(key_values):
+        help_text += key
+        if i < (len(key_values) - 1):
+            help_text += ", "
+        if i % 7 == 0 and i != (len(key_values) - 1) and i != 0:
+            help_text += "\n       "
+    help_text += "\n"
+
+
+
+    help_text += "-----------------------------------------------------\n"
+    help_text += "Generate Direction Pattern Run Command: \n\n"
+    help_text += "-generate direction pattern\n" \
+                 "commands:\n" \
+                 "  -probabilities file_name (default 'example'. the file inside the\n " \
+                 "     direction_probabilities folder)\n" \
+                 "  -size number (default 8. the size of each generated pattern.)\n" \
+                 "  -patterns number (default 60. the number of patterns to generate.)\n"\
+    "\n"\
+    "Starting with '-generate direction pattern', enter command after command on a single line.\n"
+    help_text += "-----------------------------------------------------\n"
+
+    # leave here for creating more elements here
+    # help_text += "Command    \n"
+    # help_text += "     -mode \n"
+    # help_text += "Description:\n"
+    # help_text += "     -d is the \n"
+
+    print(help_text)
+
+
+# endregion
+
 if __name__ == '__main__':
 
     # region (Not implemented yet) using command line parameters for running
 
+    if len(sys.argv) > 2:
+        show_instructions()
+        main_function(sys.argv)
+    else:
+        show_instructions()
+
+    exit(0)
+
     # Check if the correct number of command-line arguments is provided
-    # if len(sys.argv) != 2:
+    # if len(sys.argv) < 2:
     #     print("Usage: python script.py <file_path>")
     #     sys.exit(1)  # Exit with an error code
 
@@ -924,7 +1252,7 @@ if __name__ == '__main__':
     if do_this:
 
         # region Main
-
+        '''
         # getting probabilities of each step's outcome
         probabilities = get_direction_probabilities("example")
 
@@ -980,7 +1308,9 @@ if __name__ == '__main__':
 
             print("pattern=Pattern " + str(i))
             print(' '.join(map(str, pattern)) + "\n")
+        '''
         # endregion
+
 
     # endregion
 
@@ -1025,30 +1355,18 @@ if __name__ == '__main__':
 
     # region Try 3: generate_from_scale_and_direction_patterns
 
-    do_this = True
-    if do_this:
-        # this will only work when both files have the same name
-        direction_pattern_to_use = "example"
-        time_pattern_to_use = "example"
-        generate_from_scale_direction_and_time('melody_generated',
-                                               # in the key of
-                                               Key.C,
-                                               # using the scale
-                                               'mixolydian',
-                                               # percentage of scale to use (0.0 - 1.0)
-                                               0.4,
-                                               # starting octave
-                                               4,
-                                               # max length in seconds
-                                               60,
-                                               # seed
-                                               random.randint(100000000, 999999999),
-                                               # time patterns file ---------------------
-                                               time_pattern_to_use,
-                                               [1, 3],  # ^^ min to max possible to use
-                                               # direction patterns file ---------------------
-                                               direction_pattern_to_use,
-                                               [2, 6],  # ^^ min to max possible to use
-                                               )
+    # -generate melody -scale mixolydian -key C -octave 4 -times germaniccelticanglo 1 3 -directions tiny_jumps 2 6 -sp 0.4
+
+    # -generate melody
+    # mandatory commands:
+    #   -scale scale_name
+    #   -key keyname
+    #   -octave number
+    #   -d filename min_to_use max_to_use
+    #   -t filename min_to_use max_to_use
+    # optional commands:
+    #   -sp value (scale percentage, by default 1, between 0.0 and 1.0)
+    #   -seed value (random by default, or 0 for random if using an output filename and a random seed)
+    #   -output_file filename
 
     # endregion
