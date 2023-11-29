@@ -2,6 +2,9 @@
 time_patterns/*
 !time_patterns/example.timepatterns
 
+time_probabilities/*
+!time_probabilities/example.timeprobabilities
+
 pitch_patterns/*
 !pitch_patterns/example.pitchpatterns
 

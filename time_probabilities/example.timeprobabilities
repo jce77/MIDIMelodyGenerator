@@ -1,0 +1,67 @@
+# These are for generating the note direction data that decides
+# to go up/down the scale or stay in the same spot for each note
+#
+# FORMAT
+# string int float
+# Type Value Chance
+# for beats use type 'Beat', for rests use type 'Rest'
+#
+# WILDCARDS
+# 9999=continue with the same direction of movement as last time
+
+# BEATS --------------------------------------------------
+
+# chance of a note having 4 beats
+Beat 4 0.02
+
+# chance of a note having 3 beats
+Beat 3 0.06
+
+# chance of a note having 2 beats
+Beat 2 0.12
+
+# chance of a note having 1 beat
+Beat 1 0.2
+
+# chance of a note having 1/2 beat
+Beat 0.50 .25
+
+# chance of a note having 1/4 beat
+Beat 0.25 0.04
+
+# chance of a note having 1/8 beat
+Beat 0.125 0.01
+
+# chance of repeat last move wildcard
+Beat 9999 0.1
+
+# WAITS --------------------------------------------------
+
+# chance of a note having a 4 beat wait afterwards
+Rest 4 0.005
+
+# chance of a note having a 3 beat wait afterwards
+Rest 3 0.01
+
+# chance of a note having a 2 beat wait afterwards
+Rest 2 0.03
+
+# chance of a note having a 1 beat wait afterwards
+Rest 1 0.05
+
+# chance of a note having a 1/2 beat wait afterwards
+Rest 0.50 0.1
+
+# chance of a note having a 1/4 beat wait afterwards
+Rest 0.25 0.05
+
+# chance of a note having a 1/8 beat wait afterwards
+Rest 0.125 0.2
+
+# chance of a note having no wait afterwards
+Rest 0 0.60
+
+# chance of repeat last move wildcard
+Rest 9999 0.1
+
+# --------------------------------------------------------

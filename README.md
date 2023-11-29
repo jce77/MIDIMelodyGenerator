@@ -14,22 +14,40 @@ The `-generate direction pattern` command shown below can be used to assist with
 ## Generate Melody Run Command
 
 ```bash
--generate melody
-commands:
-  -scale scale_name (default 'major')
-  -key keyname (default 'C')
-  -octave number (default 3)
-  -directions filename min_to_use max_to_use (default 'example' 1 3)
-  -times filename min_to_use max_to_use (default 'example' 1 3)
+  # 1. Command starts with this -----------------------------------------------------------------
+  -generate melody
+  # 2. Setting the musical scale to use ---------------------------------------------------------
+  -scale scale_name (default 'major', see below for all options.)
+  # 3. Setting the key to play in ---------------------------------------------------------------
+  -key keyname (default 'C', see below for all options.)
+  # 4. Setting the octave to start in -----------------------------------------------------------
+  -octave number (default '3')
+  # 5.1 Option A Setting the direction patterns filename if using your own data. ----------------
+  -directions filename min_to_use max_to_use (default 'example 1 3')
+           NOTE: This is for using your own direction_patterns data only. Use
+           '-direction_probabilities' instead to auto generate data. 
+  # 5.2 Option B Setting the direction pattern probabilities file to use to  --------------------
+  # auto generate data. The numbers are for pattern size and count.
+  -direction_probabilities filename pattern_size pattern_count (default 'example 8 60')
+           NOTE: This overwrites the '-directions' command.
+  # 6.1 Option A Setting the time patterns filename if using your own data. ---------------------
+  -times filename min_to_use max_to_use (default 'example 1 3')
+  # 6.2 Option B Setting the time pattern probabilities file to use to --------------------------
+  # auto generate data. The numbers are for pattern size and count.
+  -time_probabilities filename pattern_size pattern_count (default 'example' 8 60)
+           NOTE: This overwrites the '-times' command.
+  # 7. Setting the ouput file name with appears in the output folder ----------------------------
   -output_file filename (default 'melody_generated')
-  -scale_percentage value (by default 1, between 0.0 and 1.0)
-  -seed value (default random)
+  # 8. Setting the % of the notes in the scale to use in generation.-----------------------------
+  -scale_percentage value (by default 1, must be between 0.0 and 1.0)
+  # 9. Setting the seed to use for generation if needed. ----------------------------------------
+  -seed value (default uses a random number)
 ```
 
 Starting with '-generate melody', enter command after command on a single line.
 
-The times file must exist inside the 'time_patterns' folder. The directions file must exist
-inside the 'direction_patterns' folder. 
+The times file must exist inside the 'time_patterns' folder, and the directions file must exist
+inside the 'direction_patterns' folder. That is unless using the auto generation functions.  
 
 All possible scale values: 
 
