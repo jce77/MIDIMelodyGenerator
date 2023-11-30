@@ -42,6 +42,10 @@ The `-generate direction pattern` command shown below can be used to assist with
   -scale_percentage value (by default 1, must be between 0.0 and 1.0)
   # 9. Setting the seed to use for generation if needed. ----------------------------------------
   -seed value (default uses a random number)
+  # 10. Adding random keys from outside of the scale if needed. ---------------------------------
+  -add_random_keys amount (default 0)
+  # 11. Adding specific key to the scale by force, can be used multiple times for different keys.
+  -add_extra_key keyname (no default)
 ```
 
 Starting with '-generate melody', enter command after command on a single line.
@@ -54,7 +58,8 @@ All possible scale values:
        major, minor, dorian, mixolydian, phrygian, 
        harmonic_minor, melodic_minor, whole_tone, pentatonic_major, 
        pentatonic_minor, octatonic_whole_half, octatonic_half_whole, enigmatic, 
-       neapolitan_major, neapolitan_minor
+       neapolitan_major, neapolitan_minor, diminished, locrian, 
+       prometheus, natural_minor, chromatic
 
 All possible key values:
 

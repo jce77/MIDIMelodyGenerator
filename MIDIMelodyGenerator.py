@@ -24,6 +24,7 @@ And so on...
 
 # region constants
 
+SEED_MOD_ADD_RANDOM_KEYS = 296847654
 SEED_MOD_GENERATE_MELODY_RUN_COMMANDS = 836501245
 SEED_MOD_GENERATE_TIME_PATTERN_COMMAND = 481726453
 
@@ -211,6 +212,28 @@ scales = {
     # Has a classical and rich sound, used in classical and romantic music
     'neapolitan_minor': ScaleDefinition([1, 2, 2, 2, 1, 3, 1]),
     # Similar to neapolitan major but with a minor third
+
+
+    'diminished': ScaleDefinition([1, 2, 1, 2, 1, 2, 1, 2]),
+    # Dissonant and unstable, commonly used to create tension and a sense of unease, often associated with scary or suspenseful music
+
+    'locrian': ScaleDefinition([1, 2, 1, 2, 2, 2, 2]),
+    # Unstable and mysterious, the diminished fifth degree contributes to its unsettling quality, often used in contexts that require a dark or eerie atmosphere
+
+    'prometheus': ScaleDefinition([2, 2, 2, 1, 3, 1]),
+    # Ambiguous and exotic, the augmented fourth degree adds tension and unpredictability, suitable for creating a sense of mystery or otherworldliness
+
+    'natural_minor': ScaleDefinition([2, 1, 2, 2, 1, 2, 2]),
+    # Melancholic and dark, commonly associated with somber and emotional contexts, often used in music with a serious or ominous tone
+
+    'chromatic': ScaleDefinition([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]),
+    # Highly dissonant and unpredictable, chromaticism involves the use of all twelve pitches, often employed to create a sense of instability and unease in music
+
+    # maybe implement chords in the future 'diminished_seventh': ChordDefinition([3, 3, 3]), Dissonant and tense,
+    # the diminished seventh chord is often used in horror and suspenseful music to create a sense of fear and
+    # anticipation
+
+
 
     # Add more scales as needed
 }
@@ -417,6 +440,34 @@ def get_direction_patterns(direction_patterns_file):
 # region Helper functions
 
 
+def get_all_scale_values_print():
+    scale_names = []
+    for scale in scales:
+        scale_names.append(scale)
+    help_text = "All possible scale values: \n       "
+    for i in range(len(scale_names)):
+        help_text += scale_names[i]
+        if i < (len(scale_names) - 1):
+            help_text += ", "
+        if i % 4 == 0 and i != (len(scale_names) - 1) and i != 0:
+            help_text += "\n       "
+    help_text += "\n"
+    return help_text
+
+
+def get_all_key_values_print():
+    help_text = "All possible key values:\n       "
+    key_values = [key.name for key in Key]
+    for i, key in enumerate(key_values):
+        help_text += key
+        if i < (len(key_values) - 1):
+            help_text += ", "
+        if i % 7 == 0 and i != (len(key_values) - 1) and i != 0:
+            help_text += "\n       "
+    help_text += "\n"
+    return help_text
+
+
 def lehmer_seed_combine(seed, i):
     a, m = 23, 4567  # Adjust these parameters as needed
     combined_seed = (a * seed) % m
@@ -597,6 +648,7 @@ def generate_random_indexes(input_list, seed, min_to_max_time_pattern_count):
 # region run parameter processing
 
 def generate_melody_run_commands(segments):
+    global scales
     print("RUNNING  ARGUMENTS FOR generate_melody_run_commands ")
 
     # region Setting defaults
@@ -627,6 +679,8 @@ def generate_melody_run_commands(segments):
     output_filename = "melody_generated"
     scale_percentage = 1
     seed = random.randint(100000000, 999999999)
+    add_random_keys = 0
+    add_extra_keys = []  # keys that are forcibly added to the scale if needed
 
     # endregion
 
@@ -640,13 +694,19 @@ def generate_melody_run_commands(segments):
             i += 1
         elif segment.startswith('-scale'):
             scale = segments[i][len('-scale'):].strip()
+            if scale not in scales:
+                print("ERROR: Invalid key value for -scale command: " + str(scale) + ", must use: \n" +
+                      get_all_scale_values_print())
+                sys.exit(1)
+                pass
             i += 1
         elif segment.startswith('-key'):
             key_str = segments[i][len('-key'):].strip()
             try:
                 key = Key[key_str]
             except KeyError:
-                print(f"Error: Invalid key value: {key_str}")
+                print(f"ERROR: Invalid key value for -key command: {key_str}, must use: \n" +
+                      get_all_key_values_print())
                 sys.exit(1)
             i += 1
         elif segment.startswith('-octave'):
@@ -685,10 +745,21 @@ def generate_melody_run_commands(segments):
         elif segment.startswith('-seed'):
             seed = int(segments[i][len('-seed'):].strip())
             i += 1
+        elif segment.startswith('-add_random_keys'):
+            add_random_keys = int(segments[i][len('-add_random_keys'):].strip())
+            i += 1
+        elif segment.startswith('-add_extra_key'):
+            key_str = segments[i][len('-add_extra_key'):].strip()
+            try:
+                add_extra_keys.append(Key[key_str])
+            except KeyError:
+                print(f"ERROR: Invalid key value for -add_keys command: {key_str}, must use: \n" +
+                      get_all_key_values_print())
+                sys.exit(1)
+            i += 1
         else:
             print(f"Warning: Unrecognized command: {segment}")
             i += 1
-
     print("scale=" + str(scale))
     print("key=" + str(key))
     print("octave=" + str(octave))
@@ -707,6 +778,8 @@ def generate_melody_run_commands(segments):
     print("output_filename=" + str(output_filename))
     print("scale_percentage=" + str(scale_percentage))
     print("seed=" + str(seed))
+    print("add_random_keys=" + str(add_random_keys))
+    print("add_extra_keys=" + str(add_extra_keys))
 
     # endregion
 
@@ -764,6 +837,10 @@ def generate_melody_run_commands(segments):
                                            scale,
                                            # percentage of scale to use (0.0 - 1.0)
                                            scale_percentage,
+                                           # adding random keys to the scale if needed
+                                           add_random_keys,
+                                           # adding extra specific keys to the scale if needed
+                                           add_extra_keys,
                                            # starting octave
                                            octave,
                                            # seed
@@ -1146,8 +1223,32 @@ def scale_to_midi_example(filename, scale_name, root_key, starting_octave):
 
 # region generate_from_scale_direction_and_time
 
-def generate_from_scale_direction_and_time(filename, root_key, scale_name, scale_use_percentage, starting_octave,
-                                           seed,
+def insert_key_into_scale(list, key):
+    for i in range(len(list)):
+        if i == 0:
+            # if its less that the first value
+            if key.value < list[i].value:
+                list.insert(0, key)
+                break
+            # if its between the first and second in the list
+            if list[i].value < key.value < list[i + 1].value:
+                list.insert(1, key)
+                break
+        # got to end without finding what its in between, just put on end
+        elif i == len(list) - 1:
+            if key.value > list[i].value:
+                list.append(key)
+                break
+        # checking values that aren't the first or last
+        else:
+            if list[i - 1].value < key.value < list[i].value:
+                list.insert(i, key)
+                break
+    return list
+
+
+def generate_from_scale_direction_and_time(filename, root_key, scale_name, scale_use_percentage, add_random_keys_to_scale, add_extra_keys,
+                                           starting_octave, seed,
                                            time_patterns_file, min_to_max_time_pattern_count,
                                            direction_patterns_file, min_to_max_direction_pattern_count):
     # region Initial setup
@@ -1156,7 +1257,6 @@ def generate_from_scale_direction_and_time(filename, root_key, scale_name, scale
 
     scale_keys = generate_scale_keys(scale_name, root_key, starting_octave)
     seed_modifier = 32
-    print("RUNNING generate_melody()")
     if not direction_patterns_file.endswith(".directionpatterns"):
         direction_patterns_file += ".directionpatterns"
 
@@ -1168,8 +1268,6 @@ def generate_from_scale_direction_and_time(filename, root_key, scale_name, scale
     # region Removing values from scale if needed, to simplify the pieces being made
 
     if scale_use_percentage < 1:
-        print("SCALE ARE: " + str(scale_keys))
-
         remove_values_count = int(math.floor(len(scale_keys) * scale_use_percentage))
         for i in range(remove_values_count):
             random.seed(lehmer_seed_combine(seed, seed_modifier))
@@ -1177,7 +1275,32 @@ def generate_from_scale_direction_and_time(filename, root_key, scale_name, scale
             # removed anything
             scale_keys.pop(random.randint(0, len(scale_keys) - 2))
 
-        print("SCALE REDUCED TO: " + str(scale_keys))
+    # endregion
+    add_extra_keys
+
+    # region add_extra_keys
+
+    for key in add_extra_keys:
+        if key not in scale_keys:
+            scale_keys = insert_key_into_scale(scale_keys, key)
+
+    # endregion
+
+    # region Adding random keys to scale if needed
+
+    if add_random_keys_to_scale > 0:
+        possible_keys_to_add = [key for key in list(Key) if key not in scale_keys]
+        for i in range(add_random_keys_to_scale):
+            if len(possible_keys_to_add) > 0:
+                random.seed(lehmer_seed_combine(seed, SEED_MOD_ADD_RANDOM_KEYS))
+                next_key_index = random.randint(0, len(possible_keys_to_add) - 1)
+                scale_keys = insert_key_into_scale(scale_keys, possible_keys_to_add[next_key_index])
+                # scale_keys.append(possible_keys_to_add[next_key_index])
+                del possible_keys_to_add[next_key_index]
+            else:
+                break
+
+
 
     # endregion
 
@@ -1512,9 +1635,6 @@ def generate_from_time_and_pitch_patterns(filename, root_key, scale_name, starti
 
 def show_instructions():
     global scales
-    scale_names = []
-    for scale in scales:
-        scale_names.append(scale)
     help_text = "\n\nWelcome to the MIDI Melody Generator, a program that allows for generation\n " \
                 "of MIDI files based on input parameters.\n\n"
     help_text += "-----------------------------------------------------\n"
@@ -1560,6 +1680,10 @@ def show_instructions():
                  "  -scale_percentage value (by default 1, must be between 0.0 and 1.0)\n" \
                  "  # 9. Setting the seed to use for generation if needed. ----------------------------------------\n" \
                  "  -seed value (default uses a random number)\n" \
+                 "  # 10. Adding random keys from outside of the scale if needed. ---------------------------------\n" \
+                 "  -add_random_keys amount (default 0)\n" \
+                 "  # 11. Adding specific key to the scale by force, can be used multiple times for different keys.\n" \
+                 "  -add_extra_key keyname (no default)\n" \
                  "-------------------------------------------------------------------------------------------------\n" \
                  "\n" \
                  "Starting with '-generate melody', enter command after command on a single line.\n\n" \
@@ -1567,23 +1691,10 @@ def show_instructions():
                  "inside the 'direction_patterns' folder. That is unless using the auto generation functions. " \
                  " \n\n"
 
-    help_text += "All possible scale values: \n       "
-    for i in range(len(scale_names)):
-        help_text += scale_names[i]
-        if i < (len(scale_names) - 1):
-            help_text += ", "
-        if i % 4 == 0 and i != (len(scale_names) - 1) and i != 0:
-            help_text += "\n       "
-    help_text += "\n\n"
+    help_text += get_all_scale_values_print()
+    help_text += "\n"
 
-    help_text += "All possible key values:\n       "
-    key_values = [key.name for key in Key]
-    for i, key in enumerate(key_values):
-        help_text += key
-        if i < (len(key_values) - 1):
-            help_text += ", "
-        if i % 7 == 0 and i != (len(key_values) - 1) and i != 0:
-            help_text += "\n       "
+    help_text += get_all_key_values_print()
     help_text += "\n"
 
     help_text += "-------------------------------------------------------------------------------------------------\n"
@@ -1607,7 +1718,11 @@ def show_instructions():
     print(help_text)
 
 
+
 # endregion
+
+
+
 
 if __name__ == '__main__':
 
